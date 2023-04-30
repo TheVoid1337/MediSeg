@@ -6,7 +6,7 @@ from training.training import train_unet
 from models.unet import UNet
 from data_loader.lits_dataloader import LiverTumorDataloader
 from pathlib import Path
-
+import tensorflow as tf
 input_shape = (128, 128, 1)
 target_shape = (input_shape[0], input_shape[1])
 metrics = [OneHotIoU(3, [0, 1, 2], "IoU"), dice_coefficient]
