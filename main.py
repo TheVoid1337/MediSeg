@@ -4,9 +4,9 @@ from metrics.metrics import dice_coefficient
 from keras.metrics import OneHotIoU
 from training.training import train_unet
 from models.unet import UNet
+from models.attention_unet import AttentionUnet
 from data_loader.lits_dataloader import LiverTumorDataloader
 from pathlib import Path
-import tensorflow as tf
 input_shape = (128, 128, 1)
 target_shape = (input_shape[0], input_shape[1])
 metrics = [OneHotIoU(3, [0, 1, 2], "IoU"), dice_coefficient]
@@ -24,8 +24,13 @@ if __name__ == '__main__':
     masks = np.load("LiverTumorDataset/masks.npy")
 
     train_images, train_masks, test_images, test_masks, test_images_to_plot = prepare(images, masks, num_classes=3)
+    #
+    # unet = UNet(input_shape, metrics, filters, summary=False)
+    # unet_model = unet.create_model()
+    #
+    # train_unet(unet, unet_model, train_images, train_masks)
+    #
+    att_unet = AttentionUnet(input_shape, metrics, filters, summary=False)
+    att_unet_model = att_unet.create_model()
 
-    unet = UNet(input_shape, metrics, filters, summary=False)
-    unet_model = unet.create_model()
-
-    train_unet(unet, unet_model, train_images, train_masks)
+    train_unet(att_unet, att_unet_model, train_images, train_masks)

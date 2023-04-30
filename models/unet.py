@@ -1,7 +1,7 @@
 from keras.layers import *
 from keras.losses import CategoricalCrossentropy
 from keras.models import Model
-from keras.optimizers.adam import Adam
+from keras.optimizers.optimizer_v2.adam import Adam
 
 
 class UNet:
