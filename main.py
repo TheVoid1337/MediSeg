@@ -6,6 +6,7 @@ from training.training import train_unet
 from models.unet import UNet
 from models.attention_unet import AttentionUnet
 from data_loader.lits_dataloader import LiverTumorDataloader
+from models.attention_lstm_unet import AttentionLSTMUnet
 from models.lstm_unet import LSTMUnet
 from pathlib import Path
 
@@ -38,3 +39,7 @@ if __name__ == '__main__':
     lstm_unet = LSTMUnet(input_shape, metrics, filters, summary=False)
     lstm_unet_model = lstm_unet.create_model()
     train_unet(lstm_unet, lstm_unet_model, train_images, train_masks)
+
+    att_lstm_unet = AttentionLSTMUnet(input_shape, metrics, filters, summary=False)
+    att_lstm_unet_model = att_lstm_unet.create_model()
+    train_unet(att_lstm_unet, att_lstm_unet_model, train_images, train_masks)
