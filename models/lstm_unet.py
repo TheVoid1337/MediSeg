@@ -2,7 +2,7 @@ import numpy as np
 from keras.layers import *
 from keras.losses import CategoricalCrossentropy
 from keras.models import Model
-from keras.optimizers.optimizer_v2.rmsprop import RMSprop
+from keras.optimizers.optimizer_v2.adam import Adam
 
 from models.unet import UNet
 
@@ -12,7 +12,7 @@ class LSTMUnet(UNet):
                  filters: list, number_classes: int = 3,
                  batch_norm: bool = True,
                  summary: bool = True,
-                 optimizer=RMSprop(10e-5, momentum=0.9),
+                 optimizer=Adam(10e-5),
                  dropout: float = 0.05,
                  loss=CategoricalCrossentropy()):
         super().__init__(input_shape,

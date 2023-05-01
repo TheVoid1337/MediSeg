@@ -2,10 +2,11 @@ from keras.layers import *
 from keras.losses import CategoricalCrossentropy
 from keras.models import Model
 from keras.optimizers.optimizer_v2.adam import Adam
-from models.unet import UNet
+from models.attention_unet import AttentionUnet
+from models.lstm_unet import LSTMUnet
 
 
-class AttentionUnet(UNet):
+class AttentionLSTMUnet(AttentionUnet, LSTMUnet):
     def __init__(self,
                  input_shape: tuple,
                  metrics: list,
@@ -27,26 +28,6 @@ class AttentionUnet(UNet):
                          dropout,
                          loss)
 
-    def gating_signal(self, layer, filter_index):
-        gating_signal = Conv2D(self.filters[filter_index], kernel_size=1, padding="same")(layer)
-        return gating_signal
-
-    def attention_gate(self, feature_layer, gating_signal, filter_index):
-        x_l = Conv2D(self.filters[filter_index], kernel_size=1, strides=2, padding="same")(feature_layer)
-        addition = add([x_l, gating_signal])
-
-        psi = Activation("relu")(addition)
-
-        psi_weights = Conv2D(1, 1, padding="same")(psi)
-
-        psi_weights_scaled = Activation("sigmoid")(psi_weights)
-
-        alpha_attention = UpSampling2D(size=2, interpolation="bilinear")(psi_weights_scaled)
-
-        attention = multiply([alpha_attention, feature_layer])
-
-        return attention
-
     def create_model(self) -> Model:
         input_layer = Input(shape=self.input_shape)
 
@@ -66,19 +47,19 @@ class AttentionUnet(UNet):
 
         gating_signal_1 = self.gating_signal(bottle_nec, 3)
         attention_1 = self.attention_gate(encoder4, gating_signal_1, 3)
-        decoder_1 = self.de_conv_block(bottle_nec, attention_1, 3)
+        decoder_1 = self.conv_block_lstm(bottle_nec, attention_1, 3, self.input_shape[0] // 8)
 
         gating_signal_2 = self.gating_signal(decoder_1, 2)
         attention_2 = self.attention_gate(encoder3, gating_signal_2, 2)
-        decoder_2 = self.de_conv_block(decoder_1, attention_2, 2)
+        decoder_2 = self.conv_block_lstm(decoder_1, attention_2, 2, self.input_shape[0] // 4)
 
         gating_signal_3 = self.gating_signal(decoder_2, 1)
         attention_3 = self.attention_gate(encoder2, gating_signal_3, 1)
-        decoder_3 = self.de_conv_block(decoder_2, attention_3, 1)
+        decoder_3 = self.conv_block_lstm(decoder_2, attention_3, 1, self.input_shape[0] // 2)
 
         gating_signal_4 = self.gating_signal(decoder_3, 0)
         attention_4 = self.attention_gate(encoder1, gating_signal_4, 0)
-        decoder_4 = self.de_conv_block(decoder_3, attention_4, 0)
+        decoder_4 = self.conv_block_lstm(decoder_3, attention_4, 0, self.input_shape[0])
 
         output_layer = Conv2D(self.number_classes, kernel_size=1, activation="softmax")(decoder_4)
 
