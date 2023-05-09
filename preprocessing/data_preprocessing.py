@@ -5,7 +5,7 @@ from sklearn.model_selection import train_test_split
 
 def prepare(image_data, mask_data, num_classes, test_size=0.2):
     train_images, test_images, train_masks, test_masks = train_test_split(image_data, mask_data, test_size=test_size,
-                                                                          shuffle=True)
+                                                                          shuffle=False)
 
     train_images = expand_dimensions(train_images)
     train_images = normalize(train_images)

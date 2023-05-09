@@ -2,6 +2,17 @@ from keras.callbacks import CSVLogger
 from keras.models import Model
 from pathlib import Path
 import os
+from models.attention_lstm_unet import AttentionLSTMUnet
+from models.lstm_unet import LSTMUnet
+from metrics.metrics import dice_coefficient
+from keras.metrics import OneHotIoU
+from models.unet import UNet
+from models.attention_unet import AttentionUnet
+
+input_shape = (128, 128, 1)
+target_shape = (input_shape[0], input_shape[1])
+metrics = [OneHotIoU(3, [0, 1, 2], "IoU"), dice_coefficient]
+filters = [16, 32, 64, 128, 256]
 
 
 def train_model(train_images, train_masks, model: Model, **kwargs):
@@ -33,3 +44,21 @@ def train_unet(cnn, net_model, train_images, train_masks, **kwargs):
                   "val_split": kwargs.get("val_split", 0.2)
                   }
     train_model(train_images, train_masks, net_model, **train_args)
+
+
+def train_models(train_images, train_masks, summary: bool = False):
+    unet = UNet(input_shape, metrics, filters, summary=summary)
+    unet_model = unet.create_model()
+    train_unet(unet, unet_model, train_images, train_masks)
+
+    att_unet = AttentionUnet(input_shape, metrics, filters, summary=summary)
+    att_unet_model = att_unet.create_model()
+    train_unet(att_unet, att_unet_model, train_images, train_masks)
+
+    lstm_unet = LSTMUnet(input_shape, metrics, filters, summary=summary)
+    lstm_unet_model = lstm_unet.create_model()
+    train_unet(lstm_unet, lstm_unet_model, train_images, train_masks)
+
+    att_lstm_unet = AttentionLSTMUnet(input_shape, metrics, filters, summary=summary)
+    att_lstm_unet_model = att_lstm_unet.create_model()
+    train_unet(att_lstm_unet, att_lstm_unet_model, train_images, train_masks)

@@ -114,6 +114,19 @@ class LiverTumorDataloader:
         Loads the Liver Tumor Dataset from a dataframe. If the dataframe does not exist, the dataloader will create it.
         :return: images, masks (numpy array)
         """
-        df = self.create_dataframe()
-        images, masks = self.read_files(df)
-        return self.filter_not_relevant_data(images, masks)
+        data_file = Path(f"{self.path}images.npy")
+        if not data_file.exists():
+            df = self.create_dataframe()
+            images, masks = self.read_files(df)
+            return self.filter_not_relevant_data(images, masks)
+        else:
+            return self.load_numpy_data()
+
+    def save_data(self, images, masks):
+        np.save(f"{self.path}images.npy", images)
+        np.save(f"{self.path}masks.npy", masks)
+
+    def load_numpy_data(self):
+        images = np.load(f"{self.path}images.npy")
+        masks = np.load(f"{self.path}masks.npy")
+        return images, masks
