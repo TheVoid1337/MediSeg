@@ -13,3 +13,4 @@ def dice_coefficient(y_true, y_pred, num_labels=3):
     for index in range(num_labels):
         dice += dice_coef(y_true[:, :, :, index], y_pred[:, :, :, index])
     return dice / num_labels
+
