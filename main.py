@@ -3,10 +3,13 @@ from evaluation.test_models import test_models
 from preprocessing.data_preprocessing import prepare
 from training.training import create_models
 from evaluation.visualize import create_images
+from evaluation.box_plot import create_boxplot
 
 target_shape = (128, 128)
 train = False
 test = False
+plot_prediction = False
+
 if __name__ == '__main__':
     dataloader = LiverTumorDataloader("LiverTumorDataset/", target_shape=target_shape)
 
@@ -19,5 +22,9 @@ if __name__ == '__main__':
     if test:
         test_models(unet_model, att_unet_model, lstm_unet_model, att_lstm_unet_model, test_images, test_masks)
 
-    create_images(test_images, test_masks, test_images_to_plot, unet_model, att_unet_model, lstm_unet_model,
-                  att_lstm_unet_model)
+    if plot_prediction:
+        create_images(test_images, test_masks, test_images_to_plot, unet_model, att_unet_model, lstm_unet_model,
+                      att_lstm_unet_model)
+
+    create_boxplot("results/test_data/liver_test_results.csv","liver")
+    create_boxplot("results/test_data/tumor_test_results.csv","tumor")
