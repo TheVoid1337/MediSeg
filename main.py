@@ -2,6 +2,7 @@ from data_loader.lits_dataloader import LiverTumorDataloader
 from evaluation.test_models import test_models
 from preprocessing.data_preprocessing import prepare
 from training.training import create_models
+from evaluation.visualize import create_images
 
 target_shape = (128, 128)
 train = False
@@ -17,3 +18,6 @@ if __name__ == '__main__':
 
     if test:
         test_models(unet_model, att_unet_model, lstm_unet_model, att_lstm_unet_model, test_images, test_masks)
+
+    create_images(test_images, test_masks, test_images_to_plot, unet_model, att_unet_model, lstm_unet_model,
+                  att_lstm_unet_model)
