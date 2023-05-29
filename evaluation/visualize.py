@@ -9,7 +9,7 @@ def create_images(test_images, test_masks, test_images_to_plot, unet: Model, att
                   lstm_unet: Model, att_lstm_unet: Model, num_images=20):
     for i in range(num_images):
         img = random.randint(0, len(test_images))
-        fig, axes = plt.subplots(4, 3, figsize=(12, 8))
+        fig, axes = plt.subplots(4, 3, figsize=(7, 7))
         rows = ['{}'.format(row) for row in ['U-Net', 'Attention U-Net', 'LSTM U-Net', 'Attention LSTM U-Net']]
         for ax, row in zip(axes[:, 0], rows):
             ax.annotate(row, xy=(0, 0.5), xytext=(-ax.yaxis.labelpad - 5, 0),

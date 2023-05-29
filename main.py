@@ -8,7 +8,7 @@ from evaluation.box_plot import create_boxplot
 target_shape = (128, 128)
 train = False
 test = False
-plot_prediction = False
+plot_prediction = True
 
 if __name__ == '__main__':
     dataloader = LiverTumorDataloader("LiverTumorDataset/", target_shape=target_shape)
@@ -24,7 +24,9 @@ if __name__ == '__main__':
 
     if plot_prediction:
         create_images(test_images, test_masks, test_images_to_plot, unet_model, att_unet_model, lstm_unet_model,
-                      att_lstm_unet_model)
+                      att_lstm_unet_model,num_images=20)
 
-    create_boxplot("results/test_data/liver_test_results.csv","liver")
-    create_boxplot("results/test_data/tumor_test_results.csv","tumor")
+    # print("Liver")
+    # create_boxplot("results/test_data/liver_test_results.csv","liver")
+    # print("Tumor")
+    # create_boxplot("results/test_data/tumor_test_results.csv","tumor")
