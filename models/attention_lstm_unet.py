@@ -29,8 +29,10 @@ class AttentionLSTMUnet(AttentionUnet, LSTMUnet):
                          loss)
 
     def create_model(self) -> Model:
+
         input_layer = Input(shape=self.input_shape)
 
+        # encoder part
         encoder1 = self.conv_block(input_layer, 0)
         pool1 = MaxPooling2D((2, 2))(encoder1)
 
@@ -45,6 +47,7 @@ class AttentionLSTMUnet(AttentionUnet, LSTMUnet):
 
         bottle_nec = self.conv_block(pool4, 4)
 
+        # decoder part
         gating_signal_1 = self.gating_signal(bottle_nec, 3)
         attention_1 = self.attention_gate(encoder4, gating_signal_1, 3)
         decoder_1 = self.conv_block_lstm(bottle_nec, attention_1, 3, self.input_shape[0] // 8)

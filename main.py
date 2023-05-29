@@ -26,7 +26,7 @@ if __name__ == '__main__':
         create_images(test_images, test_masks, test_images_to_plot, unet_model, att_unet_model, lstm_unet_model,
                       att_lstm_unet_model,num_images=20)
 
-    # print("Liver")
-    # create_boxplot("results/test_data/liver_test_results.csv","liver")
-    # print("Tumor")
-    # create_boxplot("results/test_data/tumor_test_results.csv","tumor")
+    print("Liver")
+    create_boxplot("results/test_data/liver_test_results.csv","liver")
+    print("Tumor")
+    create_boxplot("results/test_data/tumor_test_results.csv","tumor")

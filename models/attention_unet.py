@@ -26,12 +26,25 @@ class AttentionUnet(UNet):
                          optimizer,
                          dropout,
                          loss)
-
     def gating_signal(self, layer, filter_index):
+        """
+        Gating signal implementation for the attention gate.
+        :param layer: output of last decoder.
+        :param filter_index: index of the filters array for the convolutional layer.
+        :return: rescaled gating signal used in the attention gate.
+        """
         gating_signal = Conv2D(self.filters[filter_index], kernel_size=1, padding="same")(layer)
         return gating_signal
 
+    # attention gate
     def attention_gate(self, feature_layer, gating_signal, filter_index):
+        """
+        Recalculates weighted feature maps during training.
+        :param feature_layer: Encoder output of the same level.
+        :param gating_signal: gating output for the next lower level of the U-Net.
+        :param filter_index: index of the filters array for the convolutional layers.
+        :return: weighted feature maps by multiplying the attention scores with the feature maps.
+        """
         x_l = Conv2D(self.filters[filter_index], kernel_size=1, strides=2, padding="same")(feature_layer)
         addition = add([x_l, gating_signal])
 

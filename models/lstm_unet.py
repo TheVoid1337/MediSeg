@@ -26,6 +26,15 @@ class LSTMUnet(UNet):
                          loss)
 
     def conv_block_lstm(self, layer, encoder, filter_index, input_shape):
+        """
+        Bi-ConvLSTM block for the decoder part. Uses the output of the encoder (skip connection) and the out of the
+        next lower level to calculate better predictions used to create the mask.
+        :param layer: next lower layer (bottle nec or last decoder output).
+        :param encoder: encoder output of the same layer level.
+        :param filter_index: index of the filters array for the convolutional layer.
+        :param input_shape: shape of the target images size for the corresponding layer level.
+        :return: ConvLSTM block
+        """
         de_conv = Conv2DTranspose(self.filters[filter_index], (3, 3), (2, 2), padding="same",
                                   kernel_initializer="he_normal")(layer)
         de_conv = BatchNormalization()(de_conv)

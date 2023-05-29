@@ -7,6 +7,19 @@ from keras.models import Model
 
 def create_images(test_images, test_masks, test_images_to_plot, unet: Model, att_unet: Model,
                   lstm_unet: Model, att_lstm_unet: Model, num_images=20):
+    """
+    This function creates images with predictions for each model. The images shall show the original CT-Image with
+     the corresponding ground through and the prediction for each model.
+    :param test_images: test image data as numpy array
+    :param test_masks: test mask data as numpy array
+    :param test_images_to_plot: test images without normalisation which are used for plots only.
+    :param unet: compiled keras model for the U-Net architecture.
+    :param att_unet: compiled keras model for the Attention U-Net architecture.
+    :param lstm_unet: compiled keras model for the LSTM U-Net architecture.
+    :param att_lstm_unet: compiled keras model for the Attention LSTM U-Net architecture.
+    :param num_images: amount of images to plot.
+    :return: Images with predictions for each model.
+    """
     for i in range(num_images):
         img = random.randint(0, len(test_images))
         fig, axes = plt.subplots(4, 3, figsize=(7, 7))

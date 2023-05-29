@@ -4,6 +4,15 @@ from sklearn.model_selection import train_test_split
 
 
 def prepare(image_data, mask_data, num_classes, test_size=0.2):
+    """
+    This function splits the dataset into a train and test dataset with default size of 80/20.
+    Additionally, is function normalizes the image data and One-Hot encoding the mask data for training.
+    :param image_data: image data
+    :param mask_data: mask data
+    :param num_classes: number of classes (segmentations in one image).
+    :param test_size: size of the test dataset.
+    :return: train_images, train_masks, test_images, test_masks, test_images_to_plot (for plots only)
+    """
     train_images, test_images, train_masks, test_masks = train_test_split(image_data, mask_data, test_size=test_size,
                                                                           shuffle=False)
 

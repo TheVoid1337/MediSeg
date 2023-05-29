@@ -27,6 +27,14 @@ class UNet:
         self.dropout = dropout
 
     def conv_block(self, layer, filter_index):
+        """
+        Creates a convolutional block with two conv2D layers. If the parameters batch_norm in the
+        constructor set to true batch normalisation is added. If Dropout is not 0.0 dropout is added to this encoder
+        block.
+        :param layer: output of the previous encoder or input layer.
+        :param filter_index: index of filter size.
+        :return: encoder block.
+        """
         conv = Conv2D(self.filters[filter_index], (3, 3), kernel_initializer="he_normal",
                       padding="same")(layer)
 
@@ -52,6 +60,14 @@ class UNet:
         return conv
 
     def de_conv_block(self, layer, encoder, filter_index):
+        """
+        Decoder block up-scaling the image of the next lower level and concatenating it with encoder output.
+        Propagating the concatenation to the Convolutional block.
+        :param layer:
+        :param encoder:
+        :param filter_index:
+        :return:
+        """
         de_conv = UpSampling2D(size=2, interpolation="bilinear")(layer)
         de_conv = concatenate([encoder, de_conv])
         de_conv = self.conv_block(de_conv, filter_index)

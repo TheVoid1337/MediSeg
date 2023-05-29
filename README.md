@@ -1,6 +1,8 @@
 # MediSeg
-Dieses Projekt unterteilt sich in die folgenden Ordner
-
+Dieses Projekt dient zur Messung des Leistungseinfluss von Long Short Term Memories (LSTMs) und Attention auf die Leistungsfähigkeit der U-Net Architektur.
+Hierfür ist die folgende Projektstruktur für die Umsetzung vorgesehen. 
+## Projektstruktur
+Dieses Projekt unterteilt sich in die folgenden Ordner:
 ### data_loader: 
 Dient zum Laden des Trainingsdatensatzes. Dieser ist darauf ausgerichtet den Liver Tumor Datensatz [1],[2] der Liver Tumor Segmentation Challenge (LiTS) nach Bilic et al. [3] in das numpy Binärformat umzuwandeln. 
 ### preprocessing: 
@@ -21,8 +23,13 @@ Ordner zum Speichern der U-Net Modelle in Form der H5-Dateien der Keras-API.
 ### evaluation:
 Programmcode zur erzeugung der Ergebnisse, welche sich in den Unterordnern von results befinden.
 
-
-
+### Hinweis:
+Der Programmcode der Architekturen ist inspiriert von den Autoren der oben genannten Paper. 
+Referenz auf die originale Umsetzung der Modell architekturen fin den sich hier: <br>
+U-Net: [https://lmb.informatik.uni-freiburg.de/people/ronneber/u-net/](https://lmb.informatik.uni-freiburg.de/people/ronneber/u-net/). <br>
+Bi-Directional ConvLSTM U-Net with Densely Connected Convolutions: [https://github.com/rezazad68/BCDU-Net](https://github.com/rezazad68/BCDU-Net). <br>
+Attention U-Net: [https://github.com/ozan-oktay/Attention-Gated-Networks](https://github.com/ozan-oktay/Attention-Gated-Networks). <br>
+#### Konkrete Information zum Programmcode befindet sich in den entsprechenden Dateien des Pythoncodes.
 
 ## Quellen 
 [1] P. Bilic, P. F. Christ, E. Vorontsov et al., Liver Tumor Segmentation, 2017. Adresse:

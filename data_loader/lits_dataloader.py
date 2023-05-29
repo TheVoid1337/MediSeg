@@ -8,13 +8,18 @@ import cv2
 
 class LiverTumorDataloader:
     def __init__(self, dataset_path: str, target_shape=(128, 128)):
+        """
+        The LiverTumorDataLoader loads the Liver Tumor Dataset by creating a dataframe if not exists.
+        :param dataset_path: path to the dataset.
+        :param target_shape: preferred target shape in which the data should be scaled to.
+        """
         self.path = dataset_path
         self.target_shape = target_shape
 
     def read_files(self, data_frame: pd.DataFrame):
         """
         Loads the image data from the dataframe
-        :param data_frame: pandas dataframe which contains directory paths and file names
+        :param data_frame: pandas dataframe which contains directory paths and file names.
         :return: images, masks (numpy array)
         """
         images = []
@@ -40,7 +45,7 @@ class LiverTumorDataloader:
     def reshape_images(self, image_data, data_type):
         """
         Reshapes the images to the required target_shape. cv2.resize is used to resize the images with the
-        Area Interpolation algorithm.
+        area interpolation algorithm.
         :param image_data: images to reshape
         :param data_type: numpy data type for rescaling image memory (float32 or uint8)
         :return: stack of rescaled images
@@ -88,10 +93,10 @@ class LiverTumorDataloader:
     def filter_not_relevant_data(self, img_list, mask_list):
         """
         Shrinks the dataset to relevant data only. Relevant data is defined as the amount of mask labels unequal to zero
-        representing in sum at least 1% of an image. Zero represents the background
-        :param img_list:
-        :param mask_list:
-        :return:
+        representing in sum of at least 1% of an image. The zero Label represents the background.
+        :param img_list: image data.
+        :param mask_list: mask data.
+        :return: list of necessary images and masks for training.
         """
         images = []
         masks = []
@@ -123,10 +128,20 @@ class LiverTumorDataloader:
             return self.load_numpy_data()
 
     def save_data(self, images, masks):
+        """
+        Save the data in a numpy binary format.
+        :param images: image data.
+        :param masks: mask data.
+        :return: nothing
+        """
         np.save(f"{self.path}images.npy", images)
         np.save(f"{self.path}masks.npy", masks)
 
     def load_numpy_data(self):
+        """
+        Loads the dataset from the datasets directory.
+        :return: dataset with image and mask data as numpy array.
+        """
         images = np.load(f"{self.path}images.npy")
         masks = np.load(f"{self.path}masks.npy")
         return images, masks

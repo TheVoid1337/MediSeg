@@ -16,6 +16,14 @@ filters = [16, 32, 64, 128, 256]
 
 
 def train_model(train_images, train_masks, model: Model, **kwargs):
+    """
+    Template for model training. Uses kwargs to set the best parameters for model training.
+    :param train_images: train images as numpy array
+    :param train_masks: train masks as numpy array
+    :param model: keras model
+    :param kwargs: keyword args to set train params.
+    :return: trained model as h5 file.
+    """
     model_history = model.fit(
         train_images,
         train_masks,
@@ -47,6 +55,15 @@ def train_unet(cnn, net_model, train_images, train_masks, **kwargs):
 
 
 def create_models(train_images, train_masks, summary: bool = False, train: bool = False):
+    """
+    Creates all models and returns them. If train is true the models will be trained and returned. If summary is true
+    the models will print a summary for each model.
+    :param train_images: train images as numpy array
+    :param train_masks: train masks as numpy array
+    :param summary: if true summary is printed.
+    :param train: if true models are trained.
+    :return: model instances.
+    """
     unet = UNet(input_shape, metrics, filters, summary=summary)
     unet_model = unet.create_model()
 

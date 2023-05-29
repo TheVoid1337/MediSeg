@@ -6,6 +6,12 @@ import pandas as pd
 
 
 def calc_iou(y_true, y_pred):
+    """
+    Calculate the IoU for one Segment by using the Keras implementation for the intersection over union.
+    :param y_true: true positives
+    :param y_pred: true predicted
+    :return: IoU of the segmented image and the ground through.
+    """
     iou_liver = IoU(3, [1])
     iou_tumor = IoU(3, [2])
     if len(np.unique(y_true)) == 2:
@@ -18,6 +24,12 @@ def calc_iou(y_true, y_pred):
 
 
 def save_values(values: list[dict], filename: str):
+    """
+    Create a csv file to save the results of the evaluation of all models.
+    :param values: image and mask data as a list of dictionaries.
+    :param filename: filename of the csv file.
+    :return: csv file with the evaluation results within.
+    """
     dataframe = pd.DataFrame(values,
                              columns=["unet_iou", "att_unet_iou", "lstm_unet_iou", "att_lstm_unet_iou", "unet_dice",
                                       "att_unet_dice",
@@ -27,6 +39,19 @@ def save_values(values: list[dict], filename: str):
 
 
 def test_models(unet: Model, att_unet: Model, lstm_unet: Model, att_lstm_unet: Model, test_images, test_masks):
+    """
+    This function is used to create an evaluation for all models. On each step on image is used to create a prediction
+    for each model. Each prediction will be tested on IoU and Dice Values for each Segment afterward. In this
+    case Liver and Tumor.
+    :param unet: compiled Keras Model for the U-Net architecture.
+    :param att_unet: compiled Keras Model for the Attention U-Net architecture.
+    :param lstm_unet: compiled Keras Model for the LSTM U-Net architecture.
+    :param att_lstm_unet: compiled Keras Model for the Attention LSTM U-Net architecture.
+    :param test_images: image data from test dataset.
+    :param test_masks: test masks from the test dataset
+    :return: list of dictionaries with the evaluation data. Those data are iou/dice values for one image for each model,
+    saved in a csv file.
+    """
     liver_values = []
     tumor_values = []
 
@@ -40,6 +65,7 @@ def test_models(unet: Model, att_unet: Model, lstm_unet: Model, att_lstm_unet: M
         att_lstm_unet_pred = att_lstm_unet.predict(image,verbose=0)
 
         label = np.unique(mask)
+        # Test Liver segment only if no tumor exists for each model.
         if len(label) == 2:
             temp = np.expand_dims(test_masks[i], axis=0)
             dice_unet_liver = dice_coef(temp[:, :, :, 1], unet_pred[:, :, :, 1]).numpy()
@@ -64,6 +90,7 @@ def test_models(unet: Model, att_unet: Model, lstm_unet: Model, att_lstm_unet: M
                                  "lstm_unet_dice": dice_lstm_unet_liver,
                                  "att_lstm_unet_dice": dice_att_lstm_unet_liver})
         else:
+            # Test Liver and Tumor segments for each model.
             temp = np.expand_dims(test_masks[i], axis=0)
             dice_unet_liver = dice_coef(temp[:, :, :, 1], unet_pred[:, :, :, 1]).numpy()
             dice_att_unet_liver = dice_coef(temp[:, :, :, 1], att_unet_pred[:, :, :, 1]).numpy()

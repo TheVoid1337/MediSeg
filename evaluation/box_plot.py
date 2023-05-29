@@ -4,11 +4,19 @@ import numpy as np
 
 
 def create_boxplot(file_path: str, filename: str):
+    """
+    Creates figures of Box-Plots for one model after the evaluation.
+    :param file_path: file path of the generated csv file after evaluation.
+    :param filename: filename of the csv file.
+    :return: Box-Plot images for representation of the evaluation results.
+    """
     dataframe = pd.read_csv(file_path)
     unet = dataframe["unet_iou"]
     plt.figure(figsize=(9,9))
     plt.rcParams.update({'font.size': 18})
     plt.tight_layout()
+
+    # Printing the Standard Deviation and IoU Results for each model.
     print("U-Net IoU:" + str(np.round(unet.mean(), 3)) + "\tStandard Deviation:" + str(np.round(unet.std(), 3)))
     att_unet = dataframe["att_unet_iou"]
     print("Attention U-Net IoU:" + str(np.round(att_unet.mean(), 3)) +
@@ -31,6 +39,7 @@ def create_boxplot(file_path: str, filename: str):
     plt.rcParams.update({'font.size': 18})
     plt.tight_layout()
     unet = dataframe["unet_dice"]
+    # Printing the Standard Deviation and Dice Results for each model.
     print("U-Net Dice:" + str(np.round(unet.mean(),3)) + "\tStandard Deviation" + str(np.round(unet.std(),3)))
     att_unet = dataframe["att_unet_dice"]
     print("Attention U-Net Dice:" + str(np.round(att_unet.mean(),3)) +
