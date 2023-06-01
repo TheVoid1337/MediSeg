@@ -1,6 +1,17 @@
 # MediSeg
-Dieses Projekt dient zur Messung des Leistungseinfluss von Long Short Term Memories (LSTMs) und Attention auf die Leistungsfähigkeit der U-Net Architektur.
-Hierfür ist die folgende Projektstruktur für die Umsetzung vorgesehen. 
+Heterogene Datensätze sind im alltäglichen Gebrauch der Medizin gängig, bringen jedoch herausforderungen mit sich, welche sich in schwer zu Segmentierenden bereichen äußert.
+Um dem entgegenzuwirken, setzt die Forschung auf die Erweiterung von Long Short Term Memories (LSTMs) und Attention. Jedoch ist der konkrete verleich beider Ansätze auf die Leistungsfähigekeit bisher nur indirekt untersucht worden. 
+Dieses Projekt dient zur Messung des Leistungseinfluss von (LSTMs) und Attention auf die Leistungsfähigkeit der U-Net Architektur. Hierfür wird die Leistungsfähigkeit der folgenden vier Ansätze mit dem LiTS Datensatz Traininiert und anschließend evaluiert:
+Architekturmodelle:
+### U-Net nach Ronneberger et al. [4], <br>
+### Attention U-Net nach Oktay et al. [5], <br>
+### Bi-ConvLSTM U-Net nach Azad et al. [6], <br>
+### Attention LSTM U-Net als Kombination der oberen Ansätze. 
+
+
+## Projektaufbau
+Das Projekt 
+
 ## Projektstruktur
 Dieses Projekt unterteilt sich in die folgenden Ordner:
 ### data_loader: 
